@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import receipt_processor.receipt_processor.Service.ReceiptService;
+import receipt_processor.receipt_processor.dto.ErrorResponse;
 import receipt_processor.receipt_processor.dto.IdDTO;
 import receipt_processor.receipt_processor.dto.PointsDTO;
 import receipt_processor.receipt_processor.models.Receipt;
@@ -33,8 +34,10 @@ public class ReceiptController {
             return new ResponseEntity<>(idDTO, HttpStatus.CREATED);
         } catch (Exception e){
             log.error("Error while saving receipt " + e.getMessage());
-            ApiResponse<String> response = new ApiResponse<>("An error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+
+            String message = "The receipt is invalid";
+            ErrorResponse response = ErrorResponse.builder().description(message).build();
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -47,12 +50,16 @@ public class ReceiptController {
             return new ResponseEntity<>(pointsDTO, HttpStatus.OK);
         } catch (NoSuchElementException exception){
             log.error("Receipt does not exist for this id " + id);
-            ApiResponse<String> response = new ApiResponse<>("Receipt with this id does not exist",  HttpStatus.NOT_FOUND, null);
+
+            String message = "No receipt found for that ID.";
+            ErrorResponse response = ErrorResponse.builder().description(message).build();
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
         catch (Exception e){
             log.error("Error occurred while fetching receipt with id " + id);
-            ApiResponse<String> response = new ApiResponse<>("An error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
+
+            String message = "Internal Server Error";
+            ErrorResponse response = ErrorResponse.builder().description(message).build();
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
