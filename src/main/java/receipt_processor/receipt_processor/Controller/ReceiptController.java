@@ -7,11 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import receipt_processor.receipt_processor.Service.ReceiptService;
-import receipt_processor.receipt_processor.dto.ErrorResponse;
+import receipt_processor.receipt_processor.dto.ErrorResponseDTO;
 import receipt_processor.receipt_processor.dto.IdDTO;
 import receipt_processor.receipt_processor.dto.PointsDTO;
 import receipt_processor.receipt_processor.models.Receipt;
-import receipt_processor.receipt_processor.util.ApiResponse;
 
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -36,7 +35,7 @@ public class ReceiptController {
             log.error("Error while saving receipt " + e.getMessage());
 
             String message = "The receipt is invalid";
-            ErrorResponse response = ErrorResponse.builder().description(message).build();
+            ErrorResponseDTO response = ErrorResponseDTO.builder().description(message).build();
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
@@ -52,14 +51,14 @@ public class ReceiptController {
             log.error("Receipt does not exist for this id " + id);
 
             String message = "No receipt found for that ID.";
-            ErrorResponse response = ErrorResponse.builder().description(message).build();
+            ErrorResponseDTO response = ErrorResponseDTO.builder().description(message).build();
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
         catch (Exception e){
             log.error("Error occurred while fetching receipt with id " + id);
 
             String message = "Internal Server Error";
-            ErrorResponse response = ErrorResponse.builder().description(message).build();
+            ErrorResponseDTO response = ErrorResponseDTO.builder().description(message).build();
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
