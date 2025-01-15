@@ -1,6 +1,7 @@
 package receipt_processor.receipt_processor.Service;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class ReceiptService {
     @Autowired
     private ItemRepository itemRepository;
@@ -25,6 +27,7 @@ public class ReceiptService {
 
     @Transactional
     public UUID processReceipt(Receipt receipt_data){
+        log.info("Processing receipt" + receipt_data);
         try{
             Receipt entity = Receipt.builder()
                     .retailer(receipt_data.getRetailer())
@@ -48,10 +51,11 @@ public class ReceiptService {
             receipt.setPoints(getPointsForReceipt(receipt_data));
             receiptRepository.save(receipt);
 
+            log.info("Saved receipt" + receipt);
             return receipt.getReceipt_id();
 
         } catch (Exception e){
-            System.out.println("Internal Server Error " + e.getMessage());
+            log.error("Internal Server Error " + e.getMessage());
             throw e;
         }
     }
@@ -76,8 +80,10 @@ public class ReceiptService {
     }
 
     public PointsDTO getPoints(UUID id) {
+        log.info("Get points for Receipt with id " + id);
         Optional<Receipt> receipt = receiptRepository.findById(id);
         Receipt receiptInstance = receipt.orElseThrow(() -> new NoSuchElementException("Receipt not found"));
+        log.info("Successfully fetched Points for receipt with id " + id);
         return new PointsDTO(receiptInstance.getPoints());
     }
 }

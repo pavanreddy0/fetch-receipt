@@ -29,6 +29,6 @@ public class Receipt {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receipt")
     private List<Item> items;
     @Column(nullable = false)
-    private double total;
+    private Double total;
     private int points;
 }

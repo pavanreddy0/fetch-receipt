@@ -21,7 +21,7 @@ public class Item {
     @Column(nullable = false)
     private String shortDescription;
     @Column(nullable = false)
-    private double price;
+    private Double price;
     @ManyToOne
     @JoinColumn(name = "receipt_id")
     private Receipt receipt;
