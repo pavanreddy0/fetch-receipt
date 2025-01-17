@@ -6,6 +6,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class OddDayPurchaseRule implements ReceiptRule{
+    /*
+    * Points Calculation Rule
+        6 points if the day in the purchase date is odd.
+    * */
     @Override
     public int calculatePoints(Receipt receipt) {
         LocalDate date = LocalDate.parse(receipt.getPurchaseDate(), DateTimeFormatter.ISO_DATE);

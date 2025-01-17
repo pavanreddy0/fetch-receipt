@@ -25,6 +25,9 @@ public class ReceiptController {
 
     @PostMapping("/process")
     public ResponseEntity<?> addReceipt(@RequestBody Receipt receipt){
+        /*
+        * Takes receipt data and saves it to DB and calculates points for the receipt.
+        * */
         log.info("Adding receipt " + receipt);
         try{
             UUID receipt_id = receiptService.processReceipt(receipt);
@@ -42,6 +45,9 @@ public class ReceiptController {
 
     @GetMapping("/{id}/points")
     public ResponseEntity<?> getPointsForReceipt(@PathVariable UUID id){
+        /*
+        * Take receipt id and gives the points for the receipt.
+        * */
         log.info("Get points for receipt with id " + id);
         try {
             PointsDTO pointsDTO = receiptService.getPoints(id);

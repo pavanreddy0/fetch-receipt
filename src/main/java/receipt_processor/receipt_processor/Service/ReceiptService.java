@@ -27,6 +27,9 @@ public class ReceiptService {
 
     @Transactional
     public UUID processReceipt(Receipt receipt_data){
+        /*
+        * Process receipt and save it to DB and calculate points
+        * */
         log.info("Processing receipt" + receipt_data);
         try{
             Receipt entity = Receipt.builder()
@@ -61,12 +64,18 @@ public class ReceiptService {
     }
 
     public int getPointsForReceipt(Receipt receipt){
+        /*
+        * Calculate the points for the Receipt
+        * */
         ReceiptPointsService receiptPointsService = getReceiptPointsService();
         return receiptPointsService.calculatePoints(receipt);
     }
 
 
     public ReceiptPointsService getReceiptPointsService(){
+        /*
+        * Build all the rules required for points calculation of the Receipt.
+        * */
         List<ReceiptRule> rules = List.of(
                 new AlphaNumericRetailerRule(),
                 new RoundDollarTotalRule(),

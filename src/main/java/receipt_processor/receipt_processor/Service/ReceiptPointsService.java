@@ -14,6 +14,9 @@ public class ReceiptPointsService {
 
 
     public int calculatePoints(Receipt receipt){
+        /*
+        * Calculates total points for the Receipt
+        * */
         return rules.stream()
                 .mapToInt(rule -> rule.calculatePoints(receipt))
                 .sum();
